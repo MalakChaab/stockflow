@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#111827"><meta name="description" content="StockFlow — gestion simple des commandes et statistiques">
+<title>StockFlow — Gestion des commandes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">S</div><div><strong>StockFlow</strong><span>Commandes & stats</span></div></div>
+    <nav><button class="nav-btn active" data-view="dashboard">⌂ <span>Tableau de bord</span></button><button class="nav-btn" data-view="orders">▣ <span>Commandes</span></button><button class="nav-btn" data-view="products">▤ <span>Produits</span></button></nav>
+    <div class="sidebar-bottom"><button id="exportBtn" class="ghost-btn">↓ Exporter les données</button><small>Vos données restent sur cet appareil.</small></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">GESTION COMMERCIALE</p><h1 id="pageTitle">Tableau de bord</h1></div><button id="addOrderTop" class="primary">＋ Nouvelle commande</button></header>
+    <section id="dashboardView" class="view">
+      <div class="stats-grid"><article class="stat"><span>Chiffre d'affaires</span><strong id="statRevenue">0 DA</strong><small>Commandes enregistrées</small></article><article class="stat"><span>Commandes</span><strong id="statOrders">0</strong><small>Total</small></article><article class="stat"><span>Bénéfice retenu</span><strong id="statRetained">0 DA</strong><small>Après coûts indiqués</small></article><article class="stat"><span>Panier moyen</span><strong id="statAverage">0 DA</strong><small>Par commande</small></article></div>
+      <div class="grid-2"><section class="panel"><div class="panel-head"><div><h2>Activité récente</h2><p>Les dernières commandes</p></div><button class="link-btn" data-view="orders">Voir tout →</button></div><div id="recentOrders" class="table-wrap"></div></section><section class="panel"><div class="panel-head"><div><h2>Répartition</h2><p>État des commandes</p></div></div><div id="statusChart" class="status-chart"></div></section></div>
+    </section>
+    <section id="ordersView" class="view hidden"><div class="toolbar"><input id="searchInput" placeholder="Rechercher client, produit…"><select id="statusFilter"><option value="all">Tous les statuts</option><option value="pending">En attente</option><option value="shipped">Expédiée</option><option value="delivered">Livrée</option><option value="cancelled">Annulée</option></select></div><section class="panel"><div class="panel-head"><div><h2>Toutes les commandes</h2><p id="ordersCount">0 commande</p></div></div><div id="ordersTable" class="table-wrap"></div></section></section>
+    <section id="productsView" class="view hidden"><section class="panel"><div class="panel-head"><div><h2>Produits</h2><p>Produits les plus commandés</p></div></div><div id="productsList" class="product-list"></div></section></section>
+  </main>
+</div>
+<div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><h2>Nouvelle commande</h2><p>Ajoutez les informations de votre vente.</p></div><button id="closeModal" class="close">×</button></div><form id="orderForm"><div class="form-grid"><label>Client<input name="client" required placeholder="Nom du client"></label><label>Téléphone<input name="phone" placeholder="05 xx xx xx xx"></label><label>Produit<input name="product" required placeholder="Ex. Coque iPhone 16"></label><label>Quantité<input name="quantity" type="number" min="1" value="1" required></label><label>Prix de vente (DA)<input name="price" type="number" min="0" required placeholder="2500"></label><label>Coût / retenue (DA)<input name="cost" type="number" min="0" value="0" placeholder="500"></label><label>Statut<select name="status"><option value="pending">En attente</option><option value="shipped">Expédiée</option><option value="delivered">Livrée</option><option value="cancelled">Annulée</option></select></label><label>Date<input name="date" type="date" required></label></div><label>Note<textarea name="note" rows="3" placeholder="Adresse, couleur, modèle…"></textarea></label><div class="modal-actions"><button type="button" id="cancelModal" class="secondary">Annuler</button><button class="primary" type="submit">Enregistrer la commande</button></div></form></div></div>
+<script src="app.js"></script>
+</body></html>
