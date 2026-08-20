@@ -1,0 +1,31 @@
+name: Enable new customer orders after TEMU
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, 'fix: allow new customer after TEMU') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add independent customer button
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          marker='<script src="app.js?v=18"></script>'
+          patch='''<script>\n(function(){\n  function enableCustomerAnytime(){\n    var old=document.querySelector('#newCustomer2');\n    if(old && !document.querySelector('#newCustomerAnytime')){\n      var b=old.cloneNode(true); b.id='newCustomerAnytime'; b.textContent='＋ Nouvelle commande cliente';\n      b.onclick=function(){ if(typeof window.openCustomer==='function') window.openCustomer(); };\n      old.parentNode.appendChild(b);\n    }\n  }\n  document.addEventListener('click',function(e){\n    var b=e.target.closest && e.target.closest('#newCustomerAnytime');\n    if(b){e.preventDefault(); if(typeof window.openCustomer==='function') window.openCustomer();}\n  });\n  setInterval(enableCustomerAnytime,500);\n})();\n</script>\n'''
+          if marker in s and 'id=\'newCustomerAnytime\'' not in s:
+              s=s.replace(marker, marker+'\n'+patch)
+              p.write_text(s)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "fix: allow new customer after TEMU" || exit 0
+          git push
